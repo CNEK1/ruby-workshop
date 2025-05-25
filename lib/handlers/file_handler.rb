@@ -1,3 +1,4 @@
+require 'csv'
 class FileHandler
   def self.read_books_csv(filename = 'data/books.csv')
     unless File.exist? filename
