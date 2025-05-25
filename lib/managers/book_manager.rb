@@ -12,12 +12,12 @@ class BookManager
     books_data = FileHandler.read_books_csv
     @books = []
 
-    books_data.each do |book|
+    books_data.each do |book_data|
       book = Book.new(
-        book[:id],
-        book[:name],
-        book[:author],
-        book[:release_year]
+        book_data[:id],
+        book_data[:title],
+        book_data[:author],
+        book_data[:release_year]
       )
       @books << book
     rescue StandardError => e
@@ -49,7 +49,7 @@ class BookManager
   end
 
   def find_book_by_id(book_id)
-    @books.find { |book| book[:id] == book_id.to_i }
+    @books.find { |book| book.id == book_id.to_i }
   end
 
   def get_all_books
