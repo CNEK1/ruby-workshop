@@ -1,8 +1,8 @@
 require_relative 'lib/library_app'
-require_relative 'lib/models/book'
+require_relative 'lib/handlers/file_handler'
 begin
-  test = Book.new("1","2","3","4")
-  puts test
+  books = FileHandler.read_books_csv
+  puts books
   app = LibraryApp.new
   app.run
 rescue StandardError => e
