@@ -45,7 +45,7 @@ class LibraryApp
       when 1
         @book_manager.display_all_books
       when 2
-        puts 'Function is not available'
+        borrow_book
       when 3
         puts 'Function is not available'
       when 4
@@ -57,6 +57,33 @@ class LibraryApp
     end
   end
 
+  def borrow_book
+    if @book_manager.books_count.zero?
+      puts 'No available books found'
+      return
+    end
+
+    @book_manager.display_all_books
+    print "\nType id of wanted book: "
+    book_id = gets.chomp.to_i
+
+    book = @book_manager.find_book_by_id(book_id)
+
+    if book
+      puts "You chose #{book.id} book"
+      print 'Are you sure(y/n)?: '
+      confirm = gets.chomp.downcase
+
+      if confirm == 'y' || confirm == 'yes'
+        puts "Book '#{book.name}' has been chosen by #{@current_user}'"
+        puts 'Right now this data does not save to database'
+      else
+        puts 'Operation denied'
+      end
+    else
+      puts "Book '#{book_id}' not found"
+    end
+  end
   def display_menu
     puts "\n#{'-' * 20}"
     puts 'Main Menu'
