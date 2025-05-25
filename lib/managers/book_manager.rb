@@ -15,7 +15,7 @@ class BookManager
     books_data.each do |book|
       book = Book.new(
         book[:id],
-        book[:title],
+        book[:name],
         book[:author],
         book[:release_year]
       )
