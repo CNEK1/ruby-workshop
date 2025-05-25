@@ -4,7 +4,6 @@ class FileHandler
     unless File.exist? filename
       raise "File not found: #{filename}"
     end
-
     books_data = []
 
     begin
