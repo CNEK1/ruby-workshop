@@ -1,9 +1,10 @@
 require_relative 'models/user'
-
+require_relative 'managers/book_manager'
 class LibraryApp
   def initialize
     @current_user = nil
     puts 'Initialize of library app'
+    @book_manager = BookManager.new
   end
 
   def run
@@ -42,7 +43,7 @@ class LibraryApp
       choice = get_user_choice
       case choice
       when 1
-        puts 'Function is not available'
+        @book_manager.display_all_books
       when 2
         puts 'Function is not available'
       when 3
