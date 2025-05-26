@@ -1,10 +1,12 @@
 require_relative 'models/user'
 require_relative 'managers/book_manager'
+require_relative 'managers/borrow_manager'
 class LibraryApp
   def initialize
     @current_user = nil
     puts 'Initialize of library app'
     @book_manager = BookManager.new
+    @borrow_manager = BorrowManager.new
   end
 
   def run
@@ -28,6 +30,7 @@ class LibraryApp
 
       begin
         @current_user = User.new(username)
+        FileHandler.write_to_db_file('data/users.db', [username])
         puts "Welcome #{username}!"
         break
       rescue ArgumentError => e
@@ -47,7 +50,7 @@ class LibraryApp
       when 2
         borrow_book
       when 3
-        puts 'Function is not available'
+        return_book
       when 4
         puts "Bye, #{@current_user}!"
         break
@@ -57,6 +60,41 @@ class LibraryApp
     end
   end
 
+  def return_book
+    borrowed_book_ids = @borrow_manager.get_user_borrowed_books(@current_user.username)
+
+    if borrowed_book_ids.empty?
+      puts "You don't have any books yet"
+      return
+    end
+
+    puts "\nYour books:"
+    puts "-" * 30
+    borrowed_book_ids.each do |book_id|
+      book = @book_manager.find_book_by_id(book_id)
+      puts book if book
+    end
+
+    print "\nPut book id to return: "
+    book_id = gets.chomp.to_i
+
+    unless borrowed_book_ids.include?(book_id)
+      puts "You dont have book with ID #{book_id}."
+      return
+    end
+
+    book = @book_manager.find_book_by_id(book_id)
+    puts "Returning: #{book}"
+    print "Confirm (y/n): "
+    confirm = gets.chomp.downcase
+
+    if confirm == 'y' || confirm == 'yes'
+      result = @borrow_manager.return_book(book_id, @current_user.username)
+      puts result[:message]
+    else
+      puts "Operation denied"
+    end
+  end
   def borrow_book
     if @book_manager.books_count.zero?
       puts 'No available books found'
@@ -69,19 +107,25 @@ class LibraryApp
 
     book = @book_manager.find_book_by_id(book_id)
 
-    if book
-      puts "You chose #{book.id} book"
-      print 'Are you sure(y/n)?: '
-      confirm = gets.chomp.downcase
+    unless book
+      puts "Book not found: #{book_id}"
+      return
+    end
 
-      if confirm == 'y' || confirm == 'yes'
-        puts "Book '#{book.name}' has been chosen by #{@current_user}'"
-        puts 'Right now this data does not save to database'
-      else
-        puts 'Operation denied'
-      end
+    if @borrow_manager.book_borrowed?(book_id)
+      borrower = @borrow_manager.who_borrowed_book(book_id)
+      puts "Borrowed book found for #{borrower}"
+      return
+    end
+    puts "You choose book #{book_id}"
+    print 'Confirm (y/n): '
+    confirm = gets.chomp.downcase
+
+    if confirm == 'y' || confirm == 'yes'
+      result = @borrow_manager.borrow_book(book_id, @current_user)
+      puts result[:message]
     else
-      puts "Book '#{book_id}' not found"
+      puts 'Operation denied'
     end
   end
   def display_menu
