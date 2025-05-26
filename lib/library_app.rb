@@ -59,7 +59,7 @@ class LibraryApp
       end
     end
   end
-
+  
   def return_book
     borrowed_book_ids = @borrow_manager.get_user_borrowed_books(@current_user.username)
 
@@ -69,7 +69,7 @@ class LibraryApp
     end
 
     puts "\nYour books:"
-    puts "-" * 30
+    puts '-' * 30
     borrowed_book_ids.each do |book_id|
       book = @book_manager.find_book_by_id(book_id)
       puts book if book
@@ -85,14 +85,14 @@ class LibraryApp
 
     book = @book_manager.find_book_by_id(book_id)
     puts "Returning: #{book}"
-    print "Confirm (y/n): "
+    print 'Confirm (y/n): '
     confirm = gets.chomp.downcase
 
-    if confirm == 'y' || confirm == 'yes'
+    if ['y', 'yes'].include?(confirm)
       result = @borrow_manager.return_book(book_id, @current_user.username)
       puts result[:message]
     else
-      puts "Operation denied"
+      puts 'Operation denied'
     end
   end
   def borrow_book
@@ -121,8 +121,8 @@ class LibraryApp
     print 'Confirm (y/n): '
     confirm = gets.chomp.downcase
 
-    if confirm == 'y' || confirm == 'yes'
-      result = @borrow_manager.borrow_book(book_id, @current_user)
+    if ['y', 'yes'].include?(confirm)
+      result = @borrow_manager.borrow_book(book_id, @current_user.username)
       puts result[:message]
     else
       puts 'Operation denied'
