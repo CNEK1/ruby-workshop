@@ -1,9 +1,11 @@
+require 'bcrypt'
 class User
-  attr_reader :username
+  attr_reader :username, :password
 
-  def initialize(username)
+  def initialize(username, password = nil)
     @username = username.strip
     validate_username
+    @password = password
   end
 
   def to_s
@@ -12,6 +14,14 @@ class User
 
   def ==(other)
     other.is_a?(User) && @username == other.username
+  end
+
+  def self.hash_password(password)
+    BCrypt::Password.create(password)
+  end
+
+  def authenticate(password)
+    BCrypt::Password.new(@password) == password
   end
 
   private
