@@ -1,8 +1,9 @@
 require_relative 'lib/library_app'
-require_relative 'lib/handlers/file_handler'
-require_relative 'lib/managers/book_manager'
+require_relative 'lib/di/dependency_setup'
+
 begin
-  app = LibraryApp.new
+  container = setup_dependencies
+  app = LibraryApp.new(container)
   app.run
 rescue StandardError => e
   puts "Error: #{e.message}"

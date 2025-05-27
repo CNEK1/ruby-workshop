@@ -1,12 +1,13 @@
 require_relative 'models/user'
 require_relative 'managers/book_manager'
 require_relative 'managers/borrow_manager'
+require_relative 'di/dependency_container'
 class LibraryApp
-  def initialize
+  def initialize(container)
     @current_user = nil
     puts 'Initialize of library app'
-    @book_manager = BookManager.new
-    @borrow_manager = BorrowManager.new
+    @book_manager = container.resolve(:book_manager)
+    @borrow_manager = container.resolve(:borrow_manager)
   end
 
   def run
@@ -29,7 +30,9 @@ class LibraryApp
       username = gets.chomp
 
       begin
-        @current_user = User.new(username)
+        @current_user = User.new(username,1234)
+        test = User.hash_password(1234)
+        puts test
         FileHandler.write_to_db_file('data/users.db', [username])
         puts "Welcome #{username}!"
         break
