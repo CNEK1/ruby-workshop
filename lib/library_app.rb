@@ -31,8 +31,6 @@ class LibraryApp
 
       begin
         @current_user = User.new(username,1234)
-        test = User.hash_password(1234)
-        puts test
         FileHandler.write_to_db_file('data/users.db', [username])
         puts "Welcome #{username}!"
         break
