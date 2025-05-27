@@ -1,0 +1,22 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    bcrypt (3.1.20)
+    mini_portile2 (2.8.9)
+    sqlite3 (1.7.3)
+      mini_portile2 (~> 2.8.0)
+
+PLATFORMS
+  aarch64-linux
+  arm-linux
+  arm64-darwin
+  x86-linux
+  x86_64-darwin
+  x86_64-linux
+
+DEPENDENCIES
+  bcrypt (~> 3.1)
+  sqlite3 (~> 1.6)
+
+BUNDLED WITH
+   2.5.16
