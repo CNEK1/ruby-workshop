@@ -21,7 +21,7 @@ class User
     hash_password = hash_password(@password)
     user_data = ["#{@username}:#{hash_password}"]
     begin
-      FileHandler.write_to_db_file("data/users.db", user_data)
+      FileHandler.write_to_db_file("data/users.db", user_data,"a")
     rescue StandardError => e
       puts "Error when loading /data/users.db - #{e.message}"
     end

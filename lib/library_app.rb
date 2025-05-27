@@ -55,7 +55,7 @@ class LibraryApp
   end
   
   def return_book
-    borrowed_book_ids = @borrow_manager.get_user_borrowed_books(@current_user[username])
+    borrowed_book_ids = @borrow_manager.get_user_borrowed_books(@current_user.username)
 
     if borrowed_book_ids.empty?
       puts "You don't have any books yet"
@@ -83,7 +83,7 @@ class LibraryApp
     confirm = gets.chomp.downcase
 
     if %w[y yes].include?(confirm)
-      result = @borrow_manager.return_book(book_id, @current_user[username])
+      result = @borrow_manager.return_book(book_id, @current_user.username)
       puts result[:message]
     else
       puts 'Operation denied'
@@ -116,7 +116,7 @@ class LibraryApp
     confirm = gets.chomp.downcase
 
     if %w[y yes].include?(confirm)
-      result = @borrow_manager.borrow_book(book_id, @current_user[username])
+      result = @borrow_manager.borrow_book(book_id, @current_user.username)
       puts result[:message]
     else
       puts 'Operation denied'
