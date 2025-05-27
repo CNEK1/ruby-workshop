@@ -8,6 +8,7 @@ class LibraryApp
     puts 'Initialize of library app'
     @book_manager = container.resolve(:book_manager)
     @borrow_manager = container.resolve(:borrow_manager)
+    @auth_manager = container.resolve(:auth_manager)
   end
 
   def run
@@ -25,19 +26,11 @@ class LibraryApp
   end
 
   def authenticate_user
-    loop do
-      print 'Enter username: '
-      username = gets.chomp
-
-      begin
-        @current_user = User.new(username,1234)
-        FileHandler.write_to_db_file('data/users.db', [username])
-        puts "Welcome #{username}!"
-        break
-      rescue ArgumentError => e
-        puts "Error: #{e.message}"
-        puts 'Try again'
-      end
+    @current_user = @auth_manager.auth_menu
+    if @current_user
+      puts "Welcome #{@current_user}!"
+    else
+      puts 'Exiting Library App...'
     end
   end
 
@@ -62,7 +55,7 @@ class LibraryApp
   end
   
   def return_book
-    borrowed_book_ids = @borrow_manager.get_user_borrowed_books(@current_user.username)
+    borrowed_book_ids = @borrow_manager.get_user_borrowed_books(@current_user[username])
 
     if borrowed_book_ids.empty?
       puts "You don't have any books yet"
@@ -89,8 +82,8 @@ class LibraryApp
     print 'Confirm (y/n): '
     confirm = gets.chomp.downcase
 
-    if ['y', 'yes'].include?(confirm)
-      result = @borrow_manager.return_book(book_id, @current_user.username)
+    if %w[y yes].include?(confirm)
+      result = @borrow_manager.return_book(book_id, @current_user[username])
       puts result[:message]
     else
       puts 'Operation denied'
@@ -122,8 +115,8 @@ class LibraryApp
     print 'Confirm (y/n): '
     confirm = gets.chomp.downcase
 
-    if ['y', 'yes'].include?(confirm)
-      result = @borrow_manager.borrow_book(book_id, @current_user.username)
+    if %w[y yes].include?(confirm)
+      result = @borrow_manager.borrow_book(book_id, @current_user[username])
       puts result[:message]
     else
       puts 'Operation denied'

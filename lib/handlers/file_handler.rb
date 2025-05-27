@@ -35,7 +35,7 @@ class FileHandler
 
   def self.write_to_db_file(filename, data)
     begin
-      File.open(filename, 'w') do |f|
+      File.open(filename, 'a') do |f|
         data.each {|line| f.puts(line)}
       end
     rescue => e

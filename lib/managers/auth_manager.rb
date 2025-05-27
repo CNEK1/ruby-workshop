@@ -1,44 +1,82 @@
 require_relative '../handlers/file_handler'
+require_relative '../models/user'
 
 class AuthManager
+  def auth_menu
+    loop do
+      display_menu
+      choice = gets.chomp
+      case choice
+      when "1"
+        return login_user
+      when "2"
+        return register_user
+      when "3"
+        return nil
+      else
+        puts "Unrecognized option! Please choose between 1 and 3."
+      end
+    end
+  end
 
-  def login
-    puts "\n=== Welcome to Library App! ==="
+  private
+
+  def display_menu
     puts "1. Login to Library App"
     puts "2. Register to Library App"
     puts "3. Exit"
-    puts "3. Choose (1 - 3)"
+    print "Choose (1 - 3): "
+  end
 
-    choise = gets.chomp
+  def register_user
+    username = prompt_for_input('Username: ')
+    return unless username
 
-    case choise
-    when "1"
-      authenticate_user
-    when "2"
-      register_user
-    when "3"
-      exit
+    password = prompt_for_input('Password: ')
+    return unless password
+
+    if User.user_exists?(username)
+      puts 'This username already exists. Please choose a different username.'
+      return nil
+    end
+
+    user = User.new(username, password)
+    if user.create_user
+      puts 'User registered successfully!'
+      user
     else
-      puts "Unrecognized option!"
+      puts 'Registration failed due to an error.'
       nil
     end
+  end
 
-    private
+  def login_user
+    username = prompt_for_input('Username: ')
+    return unless username
 
-    def authenticate_user
-      print 'Username: '
-      username = gets.chomp
+    password = prompt_for_input('Enter your password: ')
+    return unless password
 
-      if username.empty?
-        puts "Username cannot be empty!"
-        return nil
+    user = User.login(username, password)
+    if user
+      puts 'Login successful!'
+      user
+    else
+      if User.user_exists?(username)
+        puts 'Invalid username or password!'
+      else
+        puts 'User does not exist!'
       end
-
-      puts "Enter your password: "
-      password = gets.chomp
-      if FileHandler
+      nil
     end
+  end
 
-    end
+  def prompt_for_input(prompt)
+    print prompt
+    input = gets.chomp
+    return input unless input.empty?
+
+    puts "#{prompt.strip.capitalize} cannot be empty!"
+    nil
   end
 end

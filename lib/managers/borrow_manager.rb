@@ -6,15 +6,16 @@ class BorrowManager
   end
 
   def borrow_book(book_id, username)
-
     book_id = book_id.to_i
 
     if book_borrowed?(book_id)
-      return { success: false, message: 'Another user got this book' }
+      return { success: false, message: 'Another user already has this book' }
     end
 
+    borrow_record = "#{book_id}:#{username}\n"
+    append_borrow_record(borrow_record)
+
     @borrowed_books << { book_id: book_id, username: username }
-    save_borrowed_books
 
     { success: true, message: 'Successfully borrowed this book' }
   end
@@ -27,7 +28,7 @@ class BorrowManager
     end
 
     unless borrowed_book
-      return { success: false, message: 'You dont have this book' }
+      return { success: false, message: 'You do not have this book' }
     end
 
     @borrowed_books.delete(borrowed_book)
@@ -35,7 +36,6 @@ class BorrowManager
 
     { success: true, message: 'Book successfully returned' }
   end
-
   def get_user_borrowed_books(username)
     @borrowed_books.select { |record| record[:username] == username }
                    .map { |record| record[:book_id] }
@@ -49,7 +49,6 @@ class BorrowManager
     record = @borrowed_books.find { |r| r[:book_id] == book_id.to_i }
     record ? record[:username] : nil
   end
-
 
   private
 
@@ -67,11 +66,20 @@ class BorrowManager
     end
   end
 
+  def append_borrow_record(borrow_record)
+    begin
+      File.open(BORROWED_BOOKS_FILE, 'a') do |file|
+        file.write(borrow_record)
+      end
+    rescue StandardError => e
+      puts "Error when writing to #{BORROWED_BOOKS_FILE} - #{e.message}"
+    end
+  end
+
   def save_borrowed_books
     lines = @borrowed_books.map do |record|
       "#{record[:book_id]}:#{record[:username]}"
     end
-
     begin FileHandler.write_to_db_file(BORROWED_BOOKS_FILE, lines)
     rescue StandardError => e
       puts "Error when writing to #{BORROWED_BOOKS_FILE} - #{e.message}"
