@@ -1,0 +1,6 @@
+# Logfile created on 2025-06-03 15:02:37 +0300 by logger.rb/v1.7.0
+I, [2025-06-03T15:02:37.446798 #75785]  INFO -- : User 'Kek' created successfully.
+I, [2025-06-03T15:04:44.916810 #76404]  INFO -- : User 'Oleg' created successfully.
+I, [2025-06-03T15:05:53.773318 #76720]  INFO -- : User 'Oke12' created successfully.
+I, [2025-06-03T15:05:59.806782 #76720]  INFO -- : Borrowed Book '1044' - Oke12 created successfully.
+I, [2025-06-03T15:06:09.875512 #76720]  INFO -- : Borrowed Book '1031' - Oke12 created successfully.

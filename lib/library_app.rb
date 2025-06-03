@@ -1,14 +1,17 @@
+# frozen_string_literal: true
+
 require_relative 'models/user'
 require_relative 'managers/book_manager'
 require_relative 'managers/borrow_manager'
-require_relative 'di/dependency_container'
+require_relative 'managers/auth_manager'
+
 class LibraryApp
-  def initialize(container)
+  def initialize
     @current_user = nil
     puts 'Initialize of library app'
-    @book_manager = container.resolve(:book_manager)
-    @borrow_manager = container.resolve(:borrow_manager)
-    @auth_manager = container.resolve(:auth_manager)
+    @book_manager = BookManager.new
+    @borrow_manager = BorrowManager.new
+    @auth_manager = AuthManager.new
   end
 
   def run
@@ -53,7 +56,7 @@ class LibraryApp
       end
     end
   end
-  
+
   def return_book
     borrowed_book_ids = @borrow_manager.get_user_borrowed_books(@current_user.username)
 
@@ -89,6 +92,7 @@ class LibraryApp
       puts 'Operation denied'
     end
   end
+
   def borrow_book
     if @book_manager.books_count.zero?
       puts 'No available books found'
@@ -122,6 +126,7 @@ class LibraryApp
       puts 'Operation denied'
     end
   end
+
   def display_menu
     puts "\n#{'-' * 20}"
     puts 'Main Menu'

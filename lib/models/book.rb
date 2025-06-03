@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Book
   attr_reader :id, :name, :author, :release_year
 
@@ -23,12 +25,22 @@ class Book
     other.is_a?(Book) && other.id == @id
   end
 
-  private
-  def validate_book_data
-    raise StandardError, 'Id can not be less than 0' if @id <=0
-    raise StandardError, 'Book name can not be empty' if @name.nil? || @name.empty?
-    raise StandardError, 'Author name can not be empty' if @author.nil? || @author.empty?
-    raise StandardError, 'Release year can not be empty' if @release_year.nil? || @release_year <= 0
+  def self.index
+    books_data = FileHandler.read_books_csv
+    temp_books = []
+    books_data.each do |book_data|
+      book = Book.new(
+        book_data[:id].to_i,
+        book_data[:title],
+        book_data[:author],
+        book_data[:release_year].to_i
+      )
+      temp_books << book
+    end
+    puts "Loaded #{temp_books.count} books."
+    temp_books
+  rescue StandardError => e
+    AppLogger.logger.error("Error in borrowed book index - '#{e.message}'")
+    raise
   end
 end
-

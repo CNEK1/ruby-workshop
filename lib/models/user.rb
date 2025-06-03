@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 require 'bcrypt'
+require_relative '../logger/app_logger'
 class User
   attr_reader :username, :password
 
-  def initialize(username, password = nil)
+  def initialize(username, password)
     @username = username.strip
     validate_username
-    @password = password
+    @password = password.strip
   end
 
   def to_s
@@ -16,51 +19,28 @@ class User
     other.is_a?(User) && @username == other.username
   end
 
-
-  def create_user
-    hash_password = hash_password(@password)
+  def create
+    hash_password = BCrypt::Password.create(@password)
     user_data = ["#{@username}:#{hash_password}"]
-    begin
-      FileHandler.write_to_db_file("data/users.db", user_data,"a")
-    rescue StandardError => e
-      puts "Error when loading /data/users.db - #{e.message}"
-    end
+
+    FileHandler.write_to_db_file('../data/users.db', user_data, 'a')
+    AppLogger.logger.info("User '#{@username}' created successfully.")
+  rescue StandardError => e
+    AppLogger.logger.error("Error in user creation: #{e.message}")
+    raise
   end
 
-  def self.user_exists?(username)
-    begin
-      lines = FileHandler.read_from_db_file("data/users.db")
-      lines.any? do |line|
-        username_db, _ = line.chomp.split(':')
-        username_db == username
-      end
-    rescue StandardError => e
-      puts "Error when loading data/users.db - #{e.message}"
-      false
+  def self.exist?(username)
+    FileHandler.read_from_db_file('../data/users.db').each do |line|
+      username_from_file, = line.split(':')
+      username_from_file == username
     end
-  end
-
-
-  def self.login(username, password)
-    begin
-      lines = FileHandler.read_from_db_file("data/users.db")
-      lines.each do |line|
-        username_db, hashed_password_db = line.chomp.split(':')
-        if username_db == username && BCrypt::Password.new(hashed_password_db).is_password?(password)
-          return User.new(username_db, password)
-        end
-      end
-    rescue StandardError => e
-      puts "Error when loading data/users.db - #{e.message}"
-    end
-    nil
+  rescue StandardError => e
+    AppLogger.logger.error("Error in user exists: #{username} - '#{e.message}'")
+    raise
   end
 
   private
-  def hash_password(password)
-    BCrypt::Password.create(password)
-  end
-
 
   def validate_username
     raise ArgumentError, 'Username cannot be empty' if @username.empty?

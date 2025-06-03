@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require_relative '../handlers/file_handler'
 require_relative '../models/user'
+require_relative '../errors/authentication_error'
 
 class AuthManager
   def auth_menu
@@ -7,14 +10,14 @@ class AuthManager
       display_menu
       choice = gets.chomp
       case choice
-      when "1"
-        return login_user
-      when "2"
-        return register_user
-      when "3"
+      when '1'
+        return handle_user_login
+      when '2'
+        return handle_user_register
+      when '3'
         return nil
       else
-        puts "Unrecognized option! Please choose between 1 and 3."
+        puts 'Unrecognized option! Please choose between 1 and 3.'
       end
     end
   end
@@ -22,61 +25,59 @@ class AuthManager
   private
 
   def display_menu
-    puts "1. Login to Library App"
-    puts "2. Register to Library App"
-    puts "3. Exit"
-    print "Choose (1 - 3): "
+    puts '1. Login to Library App'
+    puts '2. Register to Library App'
+    puts '3. Exit'
+    print 'Choose (1 - 3): '
   end
 
-  def register_user
+  def handle_user_register
     username = prompt_for_input('Username: ')
     return unless username
 
     password = prompt_for_input('Password: ')
     return unless password
 
-    if User.user_exists?(username)
-      puts 'This username already exists. Please choose a different username.'
-      return nil
+    unless User.exist?(username)
+      puts 'User already exists.'
+      return
     end
-
     user = User.new(username, password)
-    if user.create_user
-      puts 'User registered successfully!'
-      user
-    else
-      puts 'Registration failed due to an error.'
-      nil
-    end
+    user.create
+    user
+  rescue StandardError => e
+    AppLogger.logger.error("User registration failed: #{e.message}")
+    puts "An error occurred: #{e.message}"
   end
 
-  def login_user
+  def handle_user_login
     username = prompt_for_input('Username: ')
     return unless username
 
     password = prompt_for_input('Enter your password: ')
     return unless password
 
-    user = User.login(username, password)
-    if user
-      puts 'Login successful!'
-      user
-    else
-      if User.user_exists?(username)
-        puts 'Invalid username or password!'
-      else
-        puts 'User does not exist!'
-      end
-      nil
+    authenticate_user(username, password)
+  end
+
+  def authenticate_user(username, password)
+    lines = FileHandler.read_from_db_file('../data/users.db')
+    lines.each do |line|
+      username_db, hashed_password_db = line.chomp.split(':')
+      next unless username_db == username && BCrypt::Password.new(hashed_password_db).is_password?(password)
+
+      AppLogger.logger.info("User '#{username}' authenticated successfully.")
+      return User.new(username_db, password)
     end
+    AppLogger.logger.error("Authentication failed for user '#{username}'.")
+    raise AuthenticationError
   end
 
   def prompt_for_input(prompt)
-    print prompt
+    puts prompt
     input = gets.chomp
     return input unless input.empty?
 
     puts "#{prompt.strip.capitalize} cannot be empty!"
-    nil
   end
 end
