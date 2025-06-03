@@ -26,7 +26,6 @@ class BorrowManager
     borrowed_book = @borrowed_books.find do |record|
       record[:book_id] == book_id && record[:username] == username
     end
-
     return { success: false, message: 'You do not have this book' } unless borrowed_book
 
     @borrowed_books.delete(borrowed_book)

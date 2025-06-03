@@ -26,16 +26,6 @@ class BorrowedBook
     raise
   end
 
-  def self.exist?(username, book_id)
-    FileHandler.read_from_db_file('../data/borrowed_books.db').each do |line|
-      book_id_from_file, username_from_file = line.split(':')
-      username_from_file == username && book_id_from_file == book_id
-    end
-  rescue StandardError => e
-    AppLogger.logger.error("Error in borrowed book exists: #{username} - #{book_id} - '#{e.message}'")
-    raise
-  end
-
   def self.index
     borrowed_books = []
     FileHandler.read_from_db_file('../data/borrowed_books.db').each do |line|

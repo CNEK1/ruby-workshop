@@ -38,7 +38,7 @@ class AuthManager
     password = prompt_for_input('Password: ')
     return unless password
 
-    unless User.exist?(username)
+    if User.exist?(username)
       puts 'User already exists.'
       return
     end

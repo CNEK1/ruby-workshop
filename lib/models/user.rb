@@ -33,8 +33,9 @@ class User
   def self.exist?(username)
     FileHandler.read_from_db_file('../data/users.db').each do |line|
       username_from_file, = line.split(':')
-      username_from_file == username
+      return true if username_from_file == username
     end
+    false
   rescue StandardError => e
     AppLogger.logger.error("Error in user exists: #{username} - '#{e.message}'")
     raise

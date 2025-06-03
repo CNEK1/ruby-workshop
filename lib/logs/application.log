@@ -4,3 +4,11 @@ I, [2025-06-03T15:04:44.916810 #76404]  INFO -- : User 'Oleg' created successful
 I, [2025-06-03T15:05:53.773318 #76720]  INFO -- : User 'Oke12' created successfully.
 I, [2025-06-03T15:05:59.806782 #76720]  INFO -- : Borrowed Book '1044' - Oke12 created successfully.
 I, [2025-06-03T15:06:09.875512 #76720]  INFO -- : Borrowed Book '1031' - Oke12 created successfully.
+I, [2025-06-03T15:48:08.345668 #89009]  INFO -- : User 'Timur' created successfully.
+I, [2025-06-03T15:48:18.265969 #89056]  INFO -- : User 'Timur' created successfully.
+I, [2025-06-03T15:59:41.511414 #92176]  INFO -- : User 'Timur1' created successfully.
+I, [2025-06-03T16:02:14.997816 #92870]  INFO -- : User 'Timur' authenticated successfully.
+I, [2025-06-03T16:02:21.214600 #92870]  INFO -- : Borrowed Book '1035' - Timur created successfully.
+I, [2025-06-03T16:03:24.944417 #93184]  INFO -- : User 'Timur' authenticated successfully.
+I, [2025-06-03T16:03:59.453605 #93354]  INFO -- : User 'Timur' authenticated successfully.
+I, [2025-06-03T16:05:38.649836 #93778]  INFO -- : User 'Timur' authenticated successfully.
