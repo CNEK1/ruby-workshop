@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
+APP_ROOT = File.expand_path('..', __dir__)
+
+$LOAD_PATH.unshift(File.join(APP_ROOT, 'lib'))
+
+require 'dotenv/load'
+
 require_relative 'library_app'
-require_relative 'models/user'
 
 begin
   app = LibraryApp.new

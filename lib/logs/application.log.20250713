@@ -1,0 +1,6 @@
+# Logfile created on 2025-07-10 11:23:49 +0300 by logger.rb/v1.6.6
+E, [2025-07-10T11:23:49.101599 #39396] ERROR -- : User registration failed: Username is too short
+E, [2025-07-10T11:24:02.360937 #39429] ERROR -- : User registration failed: Password is too short
+I, [2025-07-10T11:24:08.308917 #39479]  INFO -- : User 'Tim' created successfully.
+I, [2025-07-10T11:24:15.166481 #39479]  INFO -- : Borrowed Book '1043' - Tim created successfully.
+I, [2025-07-10T11:24:28.817018 #39541]  INFO -- : User 'Tim' authenticated successfully.

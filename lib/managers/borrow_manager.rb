@@ -2,7 +2,7 @@
 
 require_relative '../models/borrowed_book'
 class BorrowManager
-  BORROWED_BOOKS_FILE = '../data/borrowed_books.db'
+  BORROWED_BOOKS_FILE = File.join(APP_ROOT, ENV['DATA_FOLDER'], ENV['BORROWED_BOOKS_DB'])
 
   def initialize
     @borrowed_books = load_borrowed_books

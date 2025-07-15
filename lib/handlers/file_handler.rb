@@ -2,12 +2,14 @@
 
 require 'csv'
 class FileHandler
-  def self.read_books_csv(filename = '../data/books.csv')
+  def self.read_books_csv(filename = 'books.csv')
+    file = File.join(APP_ROOT, ENV['DATA_FOLDER'], filename)
+
     books_data = []
     begin
-      CSV.foreach(filename, headers: true) do |row|
+      CSV.foreach(file, headers: true) do |row|
         if row['Book ID'].nil? || row['Book Name'].nil? || row['Author'].nil? || row['Release Year'].nil?
-          warn "Warning: Skipping malformed row in '#{filename}' due to missing headers. Row: #{row.to_h.inspect}"
+          warn "Warning: Skipping malformed row in '#{file}' due to missing headers. Row: #{row.to_h.inspect}"
           next
         end
         books_data << {
@@ -18,7 +20,7 @@ class FileHandler
         }
       end
     rescue StandardError => e
-      warn "An unexpected error occurred while reading CSV file '#{filename}': #{e.message}"
+      warn "An unexpected error occurred while reading CSV file '#{file}': #{e.message}"
     end
 
     books_data

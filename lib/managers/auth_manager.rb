@@ -5,6 +5,8 @@ require_relative '../models/user'
 require_relative '../errors/authentication_error'
 
 class AuthManager
+  USERS_DB_FILE = File.join(APP_ROOT, ENV['DATA_FOLDER'], ENV['USERS_DB'])
+
   def auth_menu
     loop do
       display_menu
@@ -61,7 +63,7 @@ class AuthManager
   end
 
   def authenticate_user(username, password)
-    lines = FileHandler.read_from_db_file('../data/users.db')
+    lines = FileHandler.read_from_db_file(USERS_DB_FILE)
     lines.each do |line|
       username_db, hashed_password_db = line.chomp.split(':')
       next unless username_db == username && BCrypt::Password.new(hashed_password_db).is_password?(password)

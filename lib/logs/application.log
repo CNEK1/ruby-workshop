@@ -1,14 +1,5 @@
-# Logfile created on 2025-06-03 15:02:37 +0300 by logger.rb/v1.7.0
-I, [2025-06-03T15:02:37.446798 #75785]  INFO -- : User 'Kek' created successfully.
-I, [2025-06-03T15:04:44.916810 #76404]  INFO -- : User 'Oleg' created successfully.
-I, [2025-06-03T15:05:53.773318 #76720]  INFO -- : User 'Oke12' created successfully.
-I, [2025-06-03T15:05:59.806782 #76720]  INFO -- : Borrowed Book '1044' - Oke12 created successfully.
-I, [2025-06-03T15:06:09.875512 #76720]  INFO -- : Borrowed Book '1031' - Oke12 created successfully.
-I, [2025-06-03T15:48:08.345668 #89009]  INFO -- : User 'Timur' created successfully.
-I, [2025-06-03T15:48:18.265969 #89056]  INFO -- : User 'Timur' created successfully.
-I, [2025-06-03T15:59:41.511414 #92176]  INFO -- : User 'Timur1' created successfully.
-I, [2025-06-03T16:02:14.997816 #92870]  INFO -- : User 'Timur' authenticated successfully.
-I, [2025-06-03T16:02:21.214600 #92870]  INFO -- : Borrowed Book '1035' - Timur created successfully.
-I, [2025-06-03T16:03:24.944417 #93184]  INFO -- : User 'Timur' authenticated successfully.
-I, [2025-06-03T16:03:59.453605 #93354]  INFO -- : User 'Timur' authenticated successfully.
-I, [2025-06-03T16:05:38.649836 #93778]  INFO -- : User 'Timur' authenticated successfully.
+# Logfile created on 2025-07-15 10:20:55 +0300 by logger.rb/v1.6.6
+E, [2025-07-15T10:20:55.739562 #13872] ERROR -- : Authentication failed for user 'Tim'.
+I, [2025-07-15T10:21:09.359354 #13896]  INFO -- : User 'Tim' authenticated successfully.
+I, [2025-07-15T10:21:16.435395 #13896]  INFO -- : Borrowed Book '1040' - Tim created successfully.
+I, [2025-07-15T10:21:20.820139 #13896]  INFO -- : Borrowed Book '1041' - Tim created successfully.
